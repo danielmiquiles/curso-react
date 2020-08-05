@@ -1,0 +1,8 @@
+.App .Cards{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+table{
+    width: 100%;
+}
