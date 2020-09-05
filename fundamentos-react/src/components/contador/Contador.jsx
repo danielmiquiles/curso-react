@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './Contador.css'
 
 class Contador extends Component {
     state = {
@@ -17,15 +18,25 @@ class Contador extends Component {
         })
     }
 
+    handleSetPasso = (event) =>{
+        this.setState({
+            passo: +event.target.value
+        })
+    }
+
     render() {
         return (
-            <div>
+            <div className="Contador">
                 <h2>Contador</h2>
                 <h3>{this.state.valorInicial}</h3>
                 <div>
+                    Passo:
+                    <input type="number" value={this.state.passo} onChange={this.handleSetPasso}/>
+                </div>
+                
                     <button onClick={this.dec}>-</button>
                     <button onClick={this.inc}>+</button>
-                </div>
+                
             </div>
         );
     }

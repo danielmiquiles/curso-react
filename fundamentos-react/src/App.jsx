@@ -18,6 +18,7 @@ import Contador from './components/contador/Contador';
 
 export default _ =>
 
+
 <div className="App">
     {document.title = "Fundamentos React"}
     <h1>Fundamentos React</h1>
