@@ -1,12 +1,12 @@
-import React from 'react';
-import PassoForm from './PassoForm';
+import React from "react";
+import PassoForm from "./PassoForm";
 
 function Botoes(props) {
   return (
-      <>
-        <button onClick={props.decrementar}>-</button>
-        <button onClick={props.incrementar}>+</button>
-      </>
+    <>
+      <button onClick={props.decrementar}>-</button>
+      <button onClick={props.incrementar}>+</button>
+    </>
   );
 }
 
