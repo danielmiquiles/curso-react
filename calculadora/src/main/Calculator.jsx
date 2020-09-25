@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+/* eslint-disable class-methods-use-this */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/destructuring-assignment */
+import React, { Component } from 'react';
 import './Calculator.css';
 import Button from '../components/Button';
 import Display from '../components/Display';
@@ -11,66 +14,140 @@ const initialState = {
   current: 0,
 };
 
-function Calculator() {
-  const [initial, setInitial] = useState(initialState);
+export default class Calculator extends Component {
+  state = { ...initialState };
 
-  function clearMemory() {
-    setInitial(initialState);
+  constructor(props) {
+    super(props);
+
+    this.clearMemory = this.clearMemory.bind(this);
+    this.setOperation = this.setOperation.bind(this);
+    this.addDigit = this.addDigit.bind(this);
   }
 
-  function setOperation(operation) {
-    console.log(operation);
+  setOperation(operation) {
+    if (this.state.current === 0) {
+      this.setState({ operation, current: 1, clearDisplay: true });
+    } else {
+      const equals = this.state.operation === '=';
+      const currentOperation = this.state.operation;
+
+      const values = [...this.state.values];
+      try {
+        values[0] = eval(`${values[0]}${currentOperation}${values[1]}`);
+      } catch (e) {
+        values[0] = this.state.values[0];
+      }
+
+      values[1] = 0;
+
+      this.setState({
+        displayValue: values[0],
+        operation: equals ? null : operation,
+        current: equals ? 0 : 1,
+        clearDisplay: !equals,
+        values,
+      });
+    }
   }
 
-  function addDigit(n) {
-    if (n === '.' && initial.displayValue.includes('.')) {
+  clearMemory() {
+    this.setState({ ...initialState });
+  }
+
+  addDigit(n) {
+    if (n === '.' && this.state.displayValue.includes('.')) {
       return;
     }
 
-    const clearDisplay = initial.displayValue === '0' || initial.clearDisplay;
-    const currentValue = clearDisplay ? '' : initial.displayValue;
+    const clearDisplay =
+      this.state.displayValue === '0' || this.state.clearDisplay;
+    const currentValue = clearDisplay ? '' : this.state.displayValue;
     const newDisplayValue = currentValue + n;
 
-    setInitial({
+    this.setState({
       displayValue: newDisplayValue,
       clearDisplay: false,
     });
 
     if (n !== '.') {
-      const i = initial.current;
+      const i = this.state.current;
       const newValue = parseFloat(newDisplayValue);
-      const values = [...initial.values];
+      const values = [...this.state.values];
       values[i] = newValue;
-      setInitial({
+      this.setState({
         values,
       });
+      console.log(values);
+      console.log(this.state);
     }
-
-    console.log(initial);
   }
 
-  return (
-    <div className="Calculator">
-      <Display value={initial.displayValue} />
-      <Button label="AC" click={() => clearMemory()} triple />
-      <Button label="/" click={(e) => setOperation(e)} operation />
-      <Button label="7" click={(e) => addDigit(e)} />
-      <Button label="8" click={(e) => addDigit(e)} />
-      <Button label="9" click={(e) => addDigit(e)} />
-      <Button label="*" operation click={(e) => setOperation(e)} />
-      <Button label="4" click={(e) => addDigit(e)} />
-      <Button label="5" click={(e) => addDigit(e)} />
-      <Button label="6" click={(e) => addDigit(e)} />
-      <Button label="-" operation click={(e) => setOperation(e)} />
-      <Button label="1" click={(e) => addDigit(e)} />
-      <Button label="2" click={(e) => addDigit(e)} />
-      <Button label="3" click={(e) => addDigit(e)} />
-      <Button label="+" operation click={(e) => setOperation(e)} />
-      <Button label="0" double click={(e) => addDigit(e)} />
-      <Button label="." click={(e) => addDigit(e)} />
-      <Button label="=" operation click={(e) => setOperation(e)} />
-    </div>
-  );
+  render() {
+    return (
+      <div className="Calculator">
+        <Display value={this.state.displayValue} />
+        <Button label="AC" click={() => this.clearMemory()} triple />
+        <Button label="/" click={(e) => this.setOperation(e)} operation />
+        <Button label="7" click={(e) => this.addDigit(e)} />
+        <Button label="8" click={(e) => this.addDigit(e)} />
+        <Button label="9" click={(e) => this.addDigit(e)} />
+        <Button label="*" operation click={(e) => this.setOperation(e)} />
+        <Button label="4" click={(e) => this.addDigit(e)} />
+        <Button label="5" click={(e) => this.addDigit(e)} />
+        <Button label="6" click={(e) => this.addDigit(e)} />
+        <Button label="-" operation click={(e) => this.setOperation(e)} />
+        <Button label="1" click={(e) => this.addDigit(e)} />
+        <Button label="2" click={(e) => this.addDigit(e)} />
+        <Button label="3" click={(e) => this.addDigit(e)} />
+        <Button label="+" operation click={(e) => this.setOperation(e)} />
+        <Button label="0" double click={(e) => this.addDigit(e)} />
+        <Button label="." click={(e) => this.addDigit(e)} />
+        <Button label="=" operation click={(e) => this.setOperation(e)} />
+      </div>
+    );
+  }
 }
 
-export default Calculator;
+// function Calculator() {
+//   const [initial, setInitial] = useState(initialState);
+
+//   function clearMemory() {
+//     setInitial(initialState);
+//   }
+
+//   function setOperation(operation) {
+//     console.log(operation);
+//   }
+
+//   function addDigit(n) {
+//     console.log(initial);
+
+//     if (n === '.' && initial.displayValue.includes('.')) {
+//       return;
+//     }
+
+//     const clearDisplay = initial.displayValue === '0' || initial.clearDisplay;
+//     const currentValue = clearDisplay ? '' : initial.displayValue;
+//     const newDisplayValue = currentValue + n;
+
+//     setInitial({
+//       ...initial,
+//       displayValue: newDisplayValue,
+//       clearDisplay: false,
+//     });
+
+// if (n !== '.') {
+//   const i = initial.current;
+//   const newValue = parseFloat(newDisplayValue);
+//   const values = [...initial.values];
+//   values[i] = newValue;
+//   setInitial({
+//     values,
+//   });
+// }
+// }
+
+// }
+
+// export default Calculator;
