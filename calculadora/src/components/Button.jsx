@@ -1,19 +1,20 @@
 import React from 'react';
 import './Button.css';
 
-// import { Container } from './styles';
-
 function Button(props) {
+  const { label, operation, double, triple, click } = props;
   return (
-  <button 
-  onClick={e=>props.click && props.click(props.label)}
-  className={`
+    <button
+      type="button"
+      onClick={() => click && click(label)}
+      className={`
     button
-    ${props.operation? 'operation': ''}
-    ${props.double? 'double': ''}
-    ${props.triple? 'triple': ''}
-    `}>
-    {props.label}
+    ${operation ? 'operation' : ''}
+    ${double ? 'double' : ''}
+    ${triple ? 'triple' : ''}
+    `}
+    >
+      {label}
     </button>
   );
 }

@@ -1,5 +1,9 @@
 import React from 'react';
 import './Display.css';
 
-export default props =>
-    <div className="display">{props.value}</div>
+function Display(props) {
+  const { value } = props;
+  return <div className="display">{value}</div>;
+}
+
+export default Display;
